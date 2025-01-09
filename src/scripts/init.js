@@ -1,6 +1,8 @@
-const mysql = require('mysql2/promise');
-const fs = require('fs');
-require('dotenv').config();
+import mysql from 'mysql2/promise';
+import fs from 'fs';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const dbConfig = {
 	host: process.env.DB_HOST,
@@ -12,12 +14,14 @@ const dbConfig = {
 
 async function initializeDatabase() {
 	try {
-		if (!fs.existsSync('init.sql')) {
+		if (!fs.existsSync('./src/scripts/init.sql')) {
 			console.error("Le fichier 'init.sql' est introuvable.");
 			return;
 		}
+
 		const connection = await mysql.createConnection(dbConfig);
-		const schema = fs.readFileSync('init.sql', 'utf8');
+		const schema = fs.readFileSync('./src/scripts/init.sql', 'utf8');
+
 		await connection.query(schema);
 		await connection.end();
 		return true;
@@ -27,4 +31,4 @@ async function initializeDatabase() {
 	}
 }
 
-module.exports = { initializeDatabase };
+export default initializeDatabase;

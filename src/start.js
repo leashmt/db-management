@@ -1,4 +1,4 @@
-const { initializeDatabase } = require('./init.js');
+import initializeDatabase from './scripts/init.js';
 
 initializeDatabase().then(success => {
 	if (success) {

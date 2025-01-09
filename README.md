@@ -10,3 +10,10 @@ DB_DATABASE=
 dépendances :
 
 npm install mysql2 dotenv
+
+commandes :
+Ajout de données :
+
+```
+    npm add
+```
