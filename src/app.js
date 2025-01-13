@@ -7,6 +7,7 @@ import postRouter from './routes/post.js';
 import deleteRouteur from './routes/delete.js';
 import getRouteur from './routes/get.js';
 import putRouteur from './routes/put.js';
+import complexRouteur from './routes/complexRoutes.js';
 
 const app = express();
 const port = 3000;
@@ -32,6 +33,7 @@ app.use('/api', postRouter);
 app.use('/api', deleteRouteur);
 app.use('/api', getRouteur);
 app.use('/api', putRouteur);
+app.use('/api/complex', complexRouteur);
 
 app.listen(port, () => {
 	console.log(`Serveur API en cours d'exécution sur http://localhost:${port}`);
