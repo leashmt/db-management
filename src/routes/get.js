@@ -1,9 +1,20 @@
 import express from 'express';
+import Joi from 'joi';
 import { getConnection } from '../app.js';
 
 const getRouteur = express.Router();
 
+const validateId = id => {
+	const schema = Joi.number().integer().positive().required();
+	return schema.validate(id);
+};
+
 getRouteur.get('/supplier/:id', async (req, res) => {
+	const { error } = validateId(req.params.id);
+	if (error) {
+		return res.status(400).json({ error: 'ID invalide' });
+	}
+
 	try {
 		const connection = await getConnection();
 		const id = req.params.id;
@@ -18,6 +29,11 @@ getRouteur.get('/supplier/:id', async (req, res) => {
 });
 
 getRouteur.get('/category/:id', async (req, res) => {
+	const { error } = validateId(req.params.id);
+	if (error) {
+		return res.status(400).json({ error: 'ID invalide' });
+	}
+
 	try {
 		const connection = await getConnection();
 		const id = req.params.id;
@@ -32,6 +48,11 @@ getRouteur.get('/category/:id', async (req, res) => {
 });
 
 getRouteur.get('/product/:id', async (req, res) => {
+	const { error } = validateId(req.params.id);
+	if (error) {
+		return res.status(400).json({ error: 'ID invalide' });
+	}
+
 	try {
 		const connection = await getConnection();
 		const id = req.params.id;
@@ -46,6 +67,11 @@ getRouteur.get('/product/:id', async (req, res) => {
 });
 
 getRouteur.get('/client/:id', async (req, res) => {
+	const { error } = validateId(req.params.id);
+	if (error) {
+		return res.status(400).json({ error: 'ID invalide' });
+	}
+
 	try {
 		const connection = await getConnection();
 		const id = req.params.id;
@@ -60,6 +86,11 @@ getRouteur.get('/client/:id', async (req, res) => {
 });
 
 getRouteur.get('/order/:id', async (req, res) => {
+	const { error } = validateId(req.params.id);
+	if (error) {
+		return res.status(400).json({ error: 'ID invalide' });
+	}
+
 	try {
 		const connection = await getConnection();
 		const id = req.params.id;
@@ -74,6 +105,15 @@ getRouteur.get('/order/:id', async (req, res) => {
 });
 
 getRouteur.get('/ligne_order', async (req, res) => {
+	const schema = Joi.object({
+		order_id: Joi.number().integer().positive().required(),
+		product_id: Joi.number().integer().positive().required(),
+	});
+	const { error } = schema.validate(req.query);
+	if (error) {
+		return res.status(400).json({ error: 'Paramètres invalides' });
+	}
+
 	try {
 		const connection = await getConnection();
 		const { order_id, product_id } = req.query;

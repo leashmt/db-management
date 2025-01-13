@@ -1,14 +1,24 @@
 import express from 'express';
+import Joi from 'joi';
 import { getConnection } from '../app.js';
 
 const complexRouteur = express.Router();
 
+const validateId = id => {
+	const schema = Joi.number().integer().positive().required();
+	return schema.validate(id);
+};
+
 complexRouteur.get('/order/:id', async (req, res) => {
+	const { error } = validateId(req.params.id);
+	if (error) {
+		return res.status(400).json({ error: 'ID invalide' });
+	}
+
 	try {
 		const connection = await getConnection();
 		const orderId = req.params.id;
 
-		// Requête pour obtenir toutes les lignes d'une commande
 		const [rows] = await connection.execute(
 			`SELECT o.id AS order_id,
 			               o.date AS order_date,
@@ -34,11 +44,15 @@ complexRouteur.get('/order/:id', async (req, res) => {
 });
 
 complexRouteur.get('/order/:id/product', async (req, res) => {
+	const { error } = validateId(req.params.id);
+	if (error) {
+		return res.status(400).json({ error: 'ID invalide' });
+	}
+
 	try {
 		const connection = await getConnection();
 		const orderId = req.params.id;
 
-		// Requête pour obtenir les produits d'une commande
 		const [rows] = await connection.execute(
 			`SELECT p.name AS product_name,
 			               p.reference AS product_reference,
@@ -60,11 +74,15 @@ complexRouteur.get('/order/:id/product', async (req, res) => {
 });
 
 complexRouteur.get('/client/:id/orders', async (req, res) => {
+	const { error } = validateId(req.params.id);
+	if (error) {
+		return res.status(400).json({ error: 'ID invalide' });
+	}
+
 	try {
 		const connection = await getConnection();
 		const clientId = req.params.id;
 
-		// Requête pour obtenir toutes les commandes d'un client
 		const [rows] = await connection.execute(
 			`SELECT o.id AS order_id,
 			               o.date AS order_date,

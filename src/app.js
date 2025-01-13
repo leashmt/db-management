@@ -9,6 +9,8 @@ import getRouteur from './routes/get.js';
 import putRouteur from './routes/put.js';
 import complexRouteur from './routes/complexRoutes.js';
 
+console.log('starting');
+
 const app = express();
 const port = 3000;
 dotenv.config();
