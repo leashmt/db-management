@@ -9,7 +9,7 @@ DB_DATABASE=
 
 dépendances :
 
-npm install mysql2 dotenv joi winston
+npm install mysql2 dotenv joi winston express-rate-limit
 
 commandes :
 Ajout de données :

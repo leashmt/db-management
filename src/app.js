@@ -2,6 +2,7 @@ import express from 'express';
 import mysql from 'mysql2/promise';
 import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
+import rateLimit from 'express-rate-limit';
 import { initializeGetAllRoutes } from './routes/getAll.js';
 import postRouter from './routes/post.js';
 import deleteRouteur from './routes/delete.js';
@@ -16,6 +17,15 @@ const port = 3000;
 dotenv.config();
 
 app.use(bodyParser.json());
+
+const limiter = rateLimit({
+	windowMs: 15 * 60 * 1000,
+	max: 100,
+	message: {
+		error: 'Trop de requêtes. Réessayez dans 15 minutes.',
+	},
+});
+app.use(limiter);
 
 app.use((req, res, next) => {
 	logger.info(
