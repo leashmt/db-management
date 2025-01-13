@@ -1,7 +1,6 @@
 import express from 'express';
 import Joi from 'joi';
 import { getConnection } from '../app.js';
-
 const postRouter = express.Router();
 
 const supplierSchema = Joi.object({

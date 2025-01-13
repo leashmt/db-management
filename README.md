@@ -9,7 +9,7 @@ DB_DATABASE=
 
 dépendances :
 
-npm install mysql2 dotenv joi
+npm install mysql2 dotenv joi winston
 
 commandes :
 Ajout de données :

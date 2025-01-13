@@ -1,6 +1,7 @@
 import mysql from 'mysql2/promise';
 import fs from 'fs';
 import dotenv from 'dotenv';
+import { connectionLogger, errorLogger } from './logger';
 
 dotenv.config();
 
@@ -24,6 +25,7 @@ async function addData() {
 		const schema = fs.readFileSync('./src/scripts/add.sql', 'utf8');
 
 		connection = await mysql.createConnection(dbConfig);
+		connectionLogger.info('Connexion réussie à la base de données.');
 
 		await connection.beginTransaction();
 
@@ -31,11 +33,13 @@ async function addData() {
 
 		await connection.commit();
 
-		console.log('Les données ont été ajoutées avec succès.');
+		console.log('Les données ont été importées avec succès.');
+		connectionLogger.info('Les données ont été importées avec succès.');
 		return true;
 	} catch (error) {
 		if (connection) await connection.rollback();
-		console.error("Erreur lors de l'ajout des données :", error.message);
+		console.error("Erreur lors de l'import des données :", error.message);
+		errorLogger.error(`Erreur lors de l'import des données : ${error.message}`);
 		return false;
 	} finally {
 		if (connection) await connection.end();
@@ -44,7 +48,7 @@ async function addData() {
 
 addData().then(success => {
 	if (!success) {
-		console.log("Échec de l'ajout des données.");
+		console.log("Échec de l'import des données.");
 	}
 });
 
