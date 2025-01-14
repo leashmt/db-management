@@ -39,7 +39,7 @@ const orderSchema = Joi.object({
 	client_id: Joi.number().integer().required(),
 	date: Joi.date().required(),
 	status: Joi.string().required(),
-	price_total: Joi.number().positive().required(),
+	price_total: Joi.number().min(0).required(),
 });
 
 const ligneOrderSchema = Joi.object({

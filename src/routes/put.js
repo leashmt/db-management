@@ -122,4 +122,21 @@ putRouteur.put('/client/:id', async (req, res) => {
 	await updateEntity('Client', id, { lastname, firstname, email, phone, address }, res);
 });
 
+putRouteur.put('/order/:id', async (req, res) => {
+	const id = req.params.id;
+	const { client_id, date, status, price_total } = req.body;
+
+	const { error } = orderSchema.validate({
+		client_id,
+		date,
+		status,
+		price_total,
+	});
+	if (error) {
+		return res.status(400).json({ error: error.details[0].message });
+	}
+
+	await updateEntity('Order', id, { client_id, date, status, price_total }, res);
+});
+
 export default putRouteur;
