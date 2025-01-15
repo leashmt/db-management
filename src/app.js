@@ -10,6 +10,7 @@ import getRouteur from './routes/get.js';
 import putRouteur from './routes/put.js';
 import complexRouteur from './routes/complexRoutes.js';
 import { connectionLogger, errorLogger, logger } from './scripts/logger.js';
+import searchRouteur from './routes/search.js';
 logger.info('Démarrage du serveur');
 
 const app = express();
@@ -62,6 +63,7 @@ app.use('/api', deleteRouteur);
 app.use('/api', getRouteur);
 app.use('/api', putRouteur);
 app.use('/api/complex', complexRouteur);
+app.use('/api/search', searchRouteur);
 
 app.use((req, res, next) => {
 	const errorMessage = `Route non trouvée : [${req.method}] ${req.originalUrl}`;

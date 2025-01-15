@@ -3,10 +3,10 @@ import express from 'express';
 const router = express.Router();
 
 const getTableRoute = (tableName, getConnection) => {
-	router.get(`/${tableName}`, async (req, res) => {
+	router.get(`/all/${tableName}`, async (req, res) => {
 		try {
 			const connection = await getConnection();
-			const [rows] = await connection.execute(`SELECT * FROM ${tableName}`);
+			const [rows] = await connection.execute(`SELECT * FROM \`${tableName}\``);
 			await connection.end();
 			res.json(rows);
 		} catch (error) {
