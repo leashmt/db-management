@@ -1,6 +1,7 @@
 import mysql from 'mysql2/promise';
 import fs from 'fs';
 import dotenv from 'dotenv';
+import { connectionLogger, errorLogger } from './logger';
 
 dotenv.config();
 
@@ -13,27 +14,41 @@ const dbConfig = {
 };
 
 async function addData() {
+	let connection;
+
 	try {
 		if (!fs.existsSync('./src/scripts/add.sql')) {
 			console.error("Le fichier 'add.sql' est introuvable.");
-			return;
+			return false;
 		}
-		const connection = await mysql.createConnection(dbConfig);
+
 		const schema = fs.readFileSync('./src/scripts/add.sql', 'utf8');
+
+		connection = await mysql.createConnection(dbConfig);
+		connectionLogger.info('Connexion réussie à la base de données.');
+
+		await connection.beginTransaction();
+
 		await connection.query(schema);
-		await connection.end();
+
+		await connection.commit();
+
+		console.log('Les données ont été importées avec succès.');
+		connectionLogger.info('Les données ont été importées avec succès.');
 		return true;
 	} catch (error) {
-		console.error("Erreur lors de l'ajout des données :", error.message);
+		if (connection) await connection.rollback();
+		console.error("Erreur lors de l'import des données :", error.message);
+		errorLogger.error(`Erreur lors de l'import des données : ${error.message}`);
 		return false;
+	} finally {
+		if (connection) await connection.end();
 	}
 }
 
 addData().then(success => {
-	if (success) {
-		console.log('Les données ont été ajoutées avec succès.');
-	} else {
-		console.log("Échec de l'ajout des données.");
+	if (!success) {
+		console.log("Échec de l'import des données.");
 	}
 });
 
