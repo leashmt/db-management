@@ -34,7 +34,7 @@ Ce projet est une application permettant de gérer les produits, commandes, clie
 
 1. Clonez ce dépôt :
    ```bash
-   git clone <URL_DU_DEPOT>
+   git clone https://github.com/leashmt/db-management
    ```
 2.	Installez les dépendances :
    ```bash
@@ -51,10 +51,6 @@ Ce projet est une application permettant de gérer les produits, commandes, clie
 ---
 ## ▶️ Démarrage du serveur
 ### V1
-Lancer le serveur avec l'API :
-```
-    npm start
-```
 Initialiser la DB
 ```
     npm init
@@ -63,6 +59,10 @@ Ajouter des données
 
 ```
     npm add
+```
+Lancer le serveur avec l'API :
+```
+    npm start
 ```
 ### V2
 Script de création de commande - avec le serveur lancé dans un autre terminal
